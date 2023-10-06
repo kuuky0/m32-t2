@@ -22,15 +22,15 @@ struct Film {
 };
 
 struct Cinemas {
-	Film kino[5];
-	int count = 5;
+	std::vector<Film> kino;
+	int count = kino.size();
 };
 
 void find_actor(string name,Cinemas& popa)
 {
 	vector<string> roles;
 	vector<string> films;
-	for (int i = 0; i < popa.count; ++i) {
+	for (int i = 0; i < popa.kino.size(); ++i) {
 		if (popa.kino[i].man.name == name)
 		{
 			string role = popa.kino[i].man.Role;
@@ -103,47 +103,27 @@ int main()
 	file1 >> dict1;
 	file1.close();
 
-	Cinemas kinoteatr;
-	kinoteatr.kino[0].name = dict1["Drive"]["Name"];
-	kinoteatr.kino[0].country = dict1["Drive"]["Country"];
-	kinoteatr.kino[0].date = dict1["Drive"]["Date"];
-	kinoteatr.kino[0].producer = dict1["Drive"]["Producer"];
-	kinoteatr.kino[0].regiser = dict1["Drive"]["Regiser"];
-	kinoteatr.kino[0].man.name = dict1["Drive"]["Actor"]["name"];
-	kinoteatr.kino[0].man.Role = dict1["Drive"]["Actor"]["Role"];
-	kinoteatr.kino[1].name = dict1["Barbie"]["Name"];
-	kinoteatr.kino[1].country = dict1["Barbie"]["Country"];
-	kinoteatr.kino[1].date = dict1["Barbie"]["Date"];
-	kinoteatr.kino[1].producer = dict1["Barbie"]["Producer"];
-	kinoteatr.kino[1].regiser = dict1["Barbie"]["Regiser"];
-	kinoteatr.kino[1].man.name = dict1["Barbie"]["Actor"]["name"];
-	kinoteatr.kino[1].man.Role = dict1["Barbie"]["Actor"]["Role"];
-	kinoteatr.kino[2].name = dict1["PlaceBeyondThePines"]["Name"];
-	kinoteatr.kino[2].country = dict1["PlaceBeyondThePines"]["Country"];
-	kinoteatr.kino[2].date = dict1["PlaceBeyondThePines"]["Date"];
-	kinoteatr.kino[2].producer = dict1["PlaceBeyondThePines"]["Producer"];
-	kinoteatr.kino[2].regiser = dict1["PlaceBeyondThePines"]["Regiser"];
-	kinoteatr.kino[2].man.name = dict1["PlaceBeyondThePines"]["Actor"]["name"];
-	kinoteatr.kino[2].man.Role = dict1["PlaceBeyondThePines"]["Actor"]["Role"];
-	kinoteatr.kino[3].name = dict1["ClockworkOrange"]["Name"];
-	kinoteatr.kino[3].country = dict1["ClockworkOrange"]["Country"];
-	kinoteatr.kino[3].date = dict1["ClockworkOrange"]["Date"];
-	kinoteatr.kino[3].producer = dict1["ClockworkOrange"]["Producer"];
-	kinoteatr.kino[3].regiser = dict1["ClockworkOrange"]["Regiser"];
-	kinoteatr.kino[3].man.name = dict1["ClockworkOrange"]["Actor"]["name"];
-	kinoteatr.kino[3].man.Role = dict1["ClockworkOrange"]["Actor"]["Role"];
-	kinoteatr.kino[4].name = dict1["Spider-Man"]["Name"];
-	kinoteatr.kino[4].country = dict1["Spider-Man"]["Country"];
-	kinoteatr.kino[4].date = dict1["Spider-Man"]["Date"];
-	kinoteatr.kino[4].producer = dict1["Spider-Man"]["Producer"];
-	kinoteatr.kino[4].regiser = dict1["Spider-Man"]["Regiser"];
-	kinoteatr.kino[4].man.name = dict1["Spider-Man"]["Actor"]["name"];
-	kinoteatr.kino[4].man.Role = dict1["Spider-Man"]["Actor"]["Role"];
+	Cinemas a;
+	vector<Film> films;
+
+	for (auto& [movieName, movieData] : dict1.items()) {
+		Film movie;
+		movie.name = movieData["Name"];
+		movie.country = movieData["Country"];
+		movie.date = movieData["Date"];
+		movie.producer = movieData["Producer"];
+		movie.regiser = movieData["Regiser"];
+		movie.man.name = movieData["Actor"]["name"];
+		movie.man.surname = movieData["Actor"]["surname"];
+		movie.man.Role = movieData["Actor"]["Role"];
+		a.kino.push_back(movie);
+		films.push_back(movie);
+	}
 
 	string name;
 	cout << "Input name of actor: ";
 	cin >> name;
-	find_actor(name,kinoteatr);
+	find_actor(name,a);
 
 	file1.close();
 }
